@@ -140,11 +140,13 @@ namespace ConsoleApplication8
             foreach (String domainName in domainNames)
             {
 
-                Console.WriteLine("***" + domainName + "***");
+                Console.Write("------" + domainName + "-------");
 
+                
+                IPAddress ipaddress = Dns.GetHostEntry(domainName).AddressList[0];
+                Console.WriteLine("---- IP: " + ipaddress);
 
-
-                foreach (TraceLocation traceLocation in Trace.Traceroute(domainName,100))
+                foreach (TraceLocation traceLocation in Trace.Traceroute(domainName, 100))
                 {
 
                     Console.Write(traceLocation.Hop + " ");
@@ -158,15 +160,23 @@ namespace ConsoleApplication8
 
                         try
                         {
-
+                          
                             Console.WriteLine(Dns.GetHostEntry(traceLocation.IpAddress).HostName.ToString());
+                            if (ipaddress.ToString() == traceLocation.IpAddress.ToString())
+                            {
 
+                                Console.WriteLine("Traceroute complete!");
+                            }   
                         }
                         catch (Exception ex)
                         {
 
                             Console.WriteLine(ex.Message);
+                            if (ipaddress.ToString() == traceLocation.IpAddress.ToString())
+                            {
 
+                                Console.WriteLine("Traceroute complete!");
+                            } 
                         }
 
                     }
@@ -174,16 +184,18 @@ namespace ConsoleApplication8
                     {
 
                         Console.WriteLine();
-
                     }
 
+                      
                 }
 
                 Console.ReadKey();
 
+                
+           
             }
-
+            
         }
-
+       
     }
 }
